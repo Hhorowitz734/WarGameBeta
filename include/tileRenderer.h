@@ -4,8 +4,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
-#include "tile.h"
+#include "Tile.h"
 #include "TileMap.h"
+
+#include <iostream>
 
 class TileRenderer {
 public:
@@ -14,8 +16,9 @@ public:
 
     ~TileRenderer() {}
 
-    void renderTiles(const TileMap& tileMap) {
+    void renderTiles(const TileMap& tileMap, int tileSize) {
         const auto& tiles = tileMap.getTileMap(); // Get tiles from TileMap
+
 
         for (const auto& row : tiles) {
             for (const auto& tile : row) {
@@ -30,7 +33,7 @@ public:
 
                 if (!texture) continue;
 
-                SDL_Rect dstRect = { tile.getX(), tile.getY(), 64, 64 };
+                SDL_Rect dstRect = { tile.getX(), tile.getY(), tileSize, tileSize };
                 SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
                 SDL_DestroyTexture(texture);
             }

@@ -1,13 +1,13 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "tile.h"
+#include "Tile.h"
 #include <vector>
 
 class TileMap {
 public:
     
-    void generateTiles(int numRows, int numCols) {
+    void generateTiles(int numRows, int numCols, int tileSize) {
         /**
          * Generate numRows * numCols tiles
          */
@@ -15,7 +15,7 @@ public:
         for (int i = 0; i < numRows; i++) {
             row = {}; 
             for (int j = 0; j < numCols; j++) {
-                Tile newTile = Tile(i * 64, j * 64, "../assets/darkgrass.png");
+                Tile newTile = Tile(j * tileSize, i * tileSize, "../assets/darkgrass.png");
                 row.push_back(newTile);
             }
             tileMap.push_back(row);

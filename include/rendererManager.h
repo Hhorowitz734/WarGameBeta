@@ -2,7 +2,7 @@
 #define RENDERER_MANAGER_H
 
 #include <SDL.h>
-#include "tileRenderer.h"
+#include "TileRenderer.h"
 
 class RendererManager {
 public:
@@ -27,7 +27,7 @@ public:
         SDL_RenderClear(renderer);
     }
 
-    void render(const TileMap& tileMap) { tileRenderer->renderTiles(tileMap); }
+    void render(const TileMap& tileMap) { tileRenderer->renderTiles(tileMap, 100); }
     void present() { SDL_RenderPresent(renderer); }
 
     SDL_Renderer* getSDLRenderer() { return renderer; }  // Access for sub-renderers
