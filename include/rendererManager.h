@@ -1,0 +1,41 @@
+#ifndef RENDERER_MANAGER_H
+#define RENDERER_MANAGER_H
+
+#include <SDL.h>
+#include "tileRenderer.h"
+
+class RendererManager {
+public:
+    explicit RendererManager(SDL_Window* window) {
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+        if (!renderer) {
+            SDL_Log("Renderer could not be created! SDL Error: %s", SDL_GetError());
+            return;
+        }
+
+        tileRenderer = new TileRenderer(renderer);
+    }
+
+    ~RendererManager() {
+        delete tileRenderer;
+        SDL_DestroyRenderer(renderer);
+    }
+
+    void clear() {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White background
+        SDL_RenderClear(renderer);
+    }
+
+    void render() { tileRenderer->renderTiles(); }
+    void present() { SDL_RenderPresent(renderer); }
+
+    SDL_Renderer* getSDLRenderer() { return renderer; }  // Access for sub-renderers
+    TileRenderer* getTileRenderer() { return tileRenderer; }  // Access to TileRenderer
+
+private:
+    SDL_Renderer* renderer;
+    TileRenderer* tileRenderer;
+};
+
+#endif // RENDERER_MANAGER_H
