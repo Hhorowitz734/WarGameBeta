@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include "rendererManager.h"
-#include "tile.h"
+#include "TileMap.h"
 
 class Game {
 public:
@@ -19,19 +19,16 @@ public:
             return false;
         }
 
-        window = SDL_CreateWindow("Tile Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("Tile Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 640, SDL_WINDOW_SHOWN);
         if (!window) {
             SDL_Log("Window could not be created! SDL Error: %s", SDL_GetError());
             return false;
         }
 
         rendererManager = new RendererManager(window);
+        tileMap.generateTiles(10, 10); // Generates a 10x10 grid of tiles
+
         running = true;
-
-        // Add example tiles
-        rendererManager->getTileRenderer()->addTile(Tile(0, 0, "../assets/darkgrass.png"));
-        rendererManager->getTileRenderer()->addTile(Tile(64, 0, "../assets/darkgrass.png"));
-
         return true;
     }
 
@@ -53,6 +50,7 @@ private:
     bool running;
     SDL_Window* window;
     RendererManager* rendererManager;
+    TileMap tileMap; // Owns all tiles
 
     void processEvents() {
         SDL_Event event;
@@ -64,12 +62,12 @@ private:
     }
 
     void update() {
-        // Placeholder for game logic updates (e.g., animations, input handling)
+        // DO LATER
     }
 
     void render() {
         rendererManager->clear();
-        rendererManager->render();
+        rendererManager->getTileRenderer()->renderTiles(tileMap); 
         rendererManager->present();
     }
 };

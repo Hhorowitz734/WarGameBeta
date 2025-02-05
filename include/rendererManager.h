@@ -23,11 +23,11 @@ public:
     }
 
     void clear() {
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White background
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
     }
 
-    void render() { tileRenderer->renderTiles(); }
+    void render(const TileMap& tileMap) { tileRenderer->renderTiles(tileMap); }
     void present() { SDL_RenderPresent(renderer); }
 
     SDL_Renderer* getSDLRenderer() { return renderer; }  // Access for sub-renderers
