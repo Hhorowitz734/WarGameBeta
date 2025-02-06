@@ -31,6 +31,8 @@ Game::~Game() {
 
 bool Game::init() {
 
+    std::string mapFile;
+
     // Initialize window
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         SDL_Log("SDL could not initialize! SDL Error: %s", SDL_GetError());
@@ -53,9 +55,34 @@ bool Game::init() {
     rendererManager = std::make_unique<RendererManager>(window, TILE_TEXTURES, TILE_SIZE);
     int numRows = WINDOW_HEIGHT / TILE_SIZE;
     int numCols = WINDOW_WIDTH / TILE_SIZE;
-    tileMap.generateTiles(numRows, numCols, TILE_SIZE, {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"}); 
 
-    tileMap.saveToFile("test.dat", MAP_PATH_PREFIX);
+
+
+#if defined(LOAD_EXISTING_MAP)
+    // Load existing map from file
+    mapFile = MAP_FILE_PATH;
+    tileMap.loadFromFile(mapFile, MAP_PATH_PREFIX);
+    SDL_Log("Loaded existing map: %s", mapFile.c_str());
+
+#elif defined(NEW_GAME_MAP)
+    // Generate a new map and save it
+    mapFile = MAP_FILE_PATH;
+    tileMap.generateTiles(numRows, numCols, TILE_SIZE, 
+        {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"});
+    tileMap.saveToFile(mapFile, MAP_PATH_PREFIX);
+    SDL_Log("Generated new map: %s", mapFile.c_str());
+
+#else
+    // Fallback: Default behavior
+    mapFile = "default_map.dat";
+    tileMap.generateTiles(numRows, numCols, TILE_SIZE, 
+        {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"});
+    tileMap.saveToFile(mapFile, MAP_PATH_PREFIX);
+    SDL_Log("No map mode selected. Defaulting to: %s", mapFile.c_str());
+#endif
+
+
+    SDL_Log("Using map: %s", mapFile.c_str());
     running = true;
     return true;
 }

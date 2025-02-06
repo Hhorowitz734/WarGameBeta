@@ -27,5 +27,13 @@ include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 # Add the executable using all source files
 add_executable(wargame ${SOURCES})
 
+
+# Load an existing map
+target_compile_definitions(wargame PRIVATE LOAD_EXISTING_MAP MAP_FILE_PATH="starter_map.dat")
+
+# Start a new game with a generated map
+#target_compile_definitions(wargame PRIVATE NEW_GAME_MAP MAP_FILE_PATH="starter_map.dat")
+
+
 # Link SDL2 and SDL2_image
 target_link_libraries(wargame ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
