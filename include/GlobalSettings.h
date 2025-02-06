@@ -18,7 +18,7 @@ public:
     int getTileSize() const;
     const std::unordered_map<std::string, std::string>& getTileTextures() const;
     const std::string& getTileTexture(const std::string& tileType) const;
-
+    const std::string& getMapPathPrefix() const;
 private:
 
     GlobalSettings(); 
@@ -28,9 +28,11 @@ private:
     const int WINDOW_HEIGHT;
     const int TILE_SIZE;
 
+    const std::string MAP_PATH_PREFIX;
+
     // Textures
     std::unordered_map<std::string, std::string> TILE_TEXTURES;
-    
+
 };
 
 #endif // GLOBAL_SETTINGS_H

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <fstream>
 
 class TileMap {
 public:
@@ -13,6 +14,10 @@ public:
 
     // Accessors
     const std::vector<Tile>& getTileMap() const;
+
+    // Save + Load
+    void saveToFile(const std::string& filename, const std::string& mapPathPrefix) const;
+    void loadFromFile(const std::string& filename, const std::string& mapPathPrefix);
 
 private:
     std::vector<Tile> tileMap;

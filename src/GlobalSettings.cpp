@@ -8,7 +8,7 @@ GlobalSettings& GlobalSettings::getInstance() {
 
 // Constructor
 GlobalSettings::GlobalSettings()
-    : TILE_SIZE(50), WINDOW_WIDTH(600), WINDOW_HEIGHT(800) {
+    : TILE_SIZE(50), WINDOW_WIDTH(600), WINDOW_HEIGHT(800), MAP_PATH_PREFIX("../maps/") {
     TILE_TEXTURES = {
         {"darkgrass", "../assets/darkgrass.png"},
         {"medgrass1", "../assets/medgrass_subtexture1.png"},
@@ -23,6 +23,7 @@ GlobalSettings::GlobalSettings()
 int GlobalSettings::getWindowWidth() const { return WINDOW_WIDTH; }
 int GlobalSettings::getWindowHeight() const { return WINDOW_HEIGHT; }
 int GlobalSettings::getTileSize() const { return TILE_SIZE; }
+const std::string& GlobalSettings::getMapPathPrefix() const {return MAP_PATH_PREFIX; }
 
 // Texture lookup
 const std::unordered_map<std::string, std::string>& GlobalSettings::getTileTextures() const {

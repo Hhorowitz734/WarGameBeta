@@ -40,6 +40,8 @@ private:
     int WINDOW_WIDTH = 0;
     int WINDOW_HEIGHT = 0;
     std::unordered_map<std::string, std::string> TILE_TEXTURES;
+    const std::string& MAP_PATH_PREFIX;
+
 
     // Core Game Loop Functions
     void processEvents();

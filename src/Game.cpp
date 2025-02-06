@@ -6,7 +6,9 @@ Game::Game()
     : window(nullptr), 
     rendererManager(nullptr), 
     running(false), 
-    cursorManager(GlobalSettings::getInstance().getTileSize()) 
+    cursorManager(GlobalSettings::getInstance().getTileSize()),
+    MAP_PATH_PREFIX(GlobalSettings::getInstance().getMapPathPrefix()) 
+
     
     {
 
@@ -53,6 +55,7 @@ bool Game::init() {
     int numCols = WINDOW_WIDTH / TILE_SIZE;
     tileMap.generateTiles(numRows, numCols, TILE_SIZE, {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"}); 
 
+    tileMap.saveToFile("test.dat", MAP_PATH_PREFIX);
     running = true;
     return true;
 }
