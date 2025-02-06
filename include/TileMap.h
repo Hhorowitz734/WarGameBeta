@@ -2,6 +2,7 @@
 #define TILEMAP_H
 
 #include "Tile.h"
+#include "GlobalSettings.h"
 #include <vector>
 #include <string>
 #include <random>
@@ -10,6 +11,9 @@
 
 class TileMap {
 public:
+
+    TileMap();
+    
     // Generates a grid of tiles with random textures
     void generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures);
 

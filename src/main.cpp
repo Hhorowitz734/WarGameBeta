@@ -7,6 +7,7 @@ int main(int argc, char* argv[]) {
         return 1; // Exit if initialization fails
     }
 
+
     game.run();
     
     return 0;

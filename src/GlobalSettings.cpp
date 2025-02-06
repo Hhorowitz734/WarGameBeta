@@ -8,7 +8,7 @@ GlobalSettings& GlobalSettings::getInstance() {
 
 // Constructor
 GlobalSettings::GlobalSettings()
-    : TILE_SIZE(50), WINDOW_WIDTH(600), WINDOW_HEIGHT(800), MAP_PATH_PREFIX("../maps/"), playerId(1) {
+    : TILE_SIZE(50), WINDOW_WIDTH(800), WINDOW_HEIGHT(600), MAP_PATH_PREFIX("../maps/"), playerId(1) {
     TILE_TEXTURES = {
         {"darkgrass", "../assets/darkgrass.png"},
         {"medgrass1", "../assets/medgrass_subtexture1.png"},

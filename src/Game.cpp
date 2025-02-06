@@ -129,7 +129,8 @@ void Game::processEvents() {
         if (event.type == SDL_MOUSEBUTTONDOWN) {
 
             std::shared_ptr<Tile> tile = tileMap.getTileAt(event.motion.x, event.motion.y);
-            enterInnerMap(tile);
+
+            if (GlobalSettings::getInstance().isPlayerId(tile->getOwnerId())) enterInnerMap(tile);
             
         }
     }
