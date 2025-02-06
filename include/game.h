@@ -6,7 +6,9 @@
 #include "TileMap.h"
 #include "GlobalSettings.h"
 #include "CursorManager.h"
+
 #include <iostream>
+#include <memory>
 
 class Game {
 public:
@@ -50,7 +52,7 @@ public:
         }
 
         // Initialize RenderManager
-        rendererManager = new RendererManager(window, TILE_TEXTURES, TILE_SIZE);
+        rendererManager = std::make_unique<RendererManager>(window, TILE_TEXTURES, TILE_SIZE);
         int numRows = WINDOW_HEIGHT / TILE_SIZE;
         int numCols = WINDOW_WIDTH / TILE_SIZE;
         tileMap.generateTiles(numRows, numCols, TILE_SIZE, {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"}); 
@@ -68,7 +70,6 @@ public:
     }
 
     void cleanup() {
-        delete rendererManager;
         if (window) SDL_DestroyWindow(window);
         SDL_Quit();
     }
@@ -76,7 +77,7 @@ public:
 private:
     bool running;
     SDL_Window* window;
-    RendererManager* rendererManager;
+    std::unique_ptr<RendererManager> rendererManager;
     TileMap tileMap; // Owns all tiles
 
     CursorManager cursorManager;
@@ -94,9 +95,9 @@ private:
                 running = false;
             }
             if (event.type == SDL_MOUSEMOTION) {
-                std::tuple a = cursorManager.update(event);
-                if (a != std::make_tuple(-1, -1)) {
-                    rendererManager->updateHover(a);
+                int hoverX, hoverY;
+                if (cursorManager.update(event, WINDOW_WIDTH / TILE_SIZE, WINDOW_HEIGHT / TILE_SIZE, hoverX, hoverY)) {
+                    rendererManager->updateHover(hoverX, hoverY); // Send coordinates directly
                 }
 
             }

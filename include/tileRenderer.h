@@ -20,25 +20,23 @@ public:
     }
 
     void renderTiles(const TileMap& tileMap, int tileSize) {
-        const auto& tiles = tileMap.getTileMap(); 
+    const auto& tiles = tileMap.getTileMap(); 
 
-        for (const auto& row : tiles) {
-            for (const auto& tile : row) {
-                std::string assetAlias = tile.getAssetAlias();
-                SDL_Texture* texture = getTexture(assetAlias);
+    for (const auto& tile : tiles) {
+        auto it = textureCache.find(tile.getAssetAlias());
+        if (it == textureCache.end() || !it->second) continue;
 
-                if (!texture) continue;
-
-                SDL_Rect dstRect = { tile.getX(), tile.getY(), tileSize, tileSize };
-                SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
-            }
-        }
+        SDL_Rect dstRect = { tile.getX(), tile.getY(), tileSize, tileSize };
+        SDL_RenderCopy(renderer, it->second, nullptr, &dstRect);
     }
+}
+
 
 private:
+
     SDL_Renderer* renderer;
     std::unordered_map<std::string, std::string> assetMap;
-    std::unordered_map<std::string, SDL_Texture*> textureCache; // ✅ Cache textures
+    std::unordered_map<std::string, SDL_Texture*> textureCache; 
 
     void loadTextures() {
         for (const auto& pair : assetMap) {

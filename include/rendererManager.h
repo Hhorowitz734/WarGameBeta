@@ -44,7 +44,9 @@ public:
         
     }
 
-    void updateHover(std::tuple<int, int> newHover) { currHover = newHover; }
+    void updateHover(int x, int y) {
+        currHover = std::make_tuple(x, y);
+    }
 
 
 

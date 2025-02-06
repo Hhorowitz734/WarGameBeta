@@ -21,12 +21,12 @@ public:
     
     int getTileSize() const { return TILE_SIZE; }
 
-    std::string getTileTexture(const std::string& tileType) const {
-        auto it = TILE_TEXTURES.find(tileType);
-        return (it != TILE_TEXTURES.end()) ? it->second : "";
+    const std::string& getTileTexture(const std::string& tileType) const {
+        return TILE_TEXTURES.at(tileType);
     }
 
-    std::unordered_map<std::string, std::string> getTileTextures() const {
+
+    const std::unordered_map<std::string, std::string>& getTileTextures() const {
         return TILE_TEXTURES;
     }
 
@@ -46,8 +46,6 @@ private:
         {"deadgrass1", "../assets/deadgrass1_subtexture1.png"},
         {"deadgrass2", "../assets/deadgrass1_subtexture2.png"},
         {"deadgrass3", "../assets/deadgrass1_subtexture3.png"},
-
-
     };
 
     GlobalSettings() {};
