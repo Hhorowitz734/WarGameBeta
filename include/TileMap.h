@@ -15,6 +15,7 @@ public:
 
     // Accessors
     const std::vector<std::shared_ptr<Tile>>& getTileMap() const;
+    const std::shared_ptr<Tile> getTileAt(int x, int y) const;
 
     // Save + Load
     void saveToFile(const std::string& filename, const std::string& mapPathPrefix) const;
@@ -24,6 +25,7 @@ private:
     std::vector<std::shared_ptr<Tile>> tileMap;
     int numRows = 0;
     int numCols = 0;
+    int TILE_SIZE = 0;
 };
 
 #endif // TILEMAP_H

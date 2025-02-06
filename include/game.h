@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <unordered_map>
+#include <filesystem>
 
 // Game Components
 #include "RendererManager.h"
@@ -56,6 +57,12 @@ private:
     void processEvents();
     void update();
     void render();
+
+    // Inner Map Stuff
+    void enterInnerMap(std::shared_ptr<Tile> tile);
+    void generateInnerMap(std::shared_ptr<Tile> tile); // Given a tile, sees if it has an inner map. if it does, loads it. otherwise generates it
+    std::vector<std::string> getMatchingTerrain(const std::string& terrainType);
+
 };
 
 #endif // GAME_H

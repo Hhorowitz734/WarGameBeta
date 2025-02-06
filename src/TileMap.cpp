@@ -6,6 +6,7 @@ void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::v
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dist(0, textures.size() - 1);
 
+    this->TILE_SIZE = tileSize;
     this->numRows = numRows;
     this->numCols = numCols;
 
@@ -90,3 +91,17 @@ void TileMap::loadFromFile(const std::string& filename, const std::string& mapPa
         tileMap.emplace_back(std::make_shared<Tile>(x, y, alias));
     }
 }
+
+
+const std::shared_ptr<Tile> TileMap::getTileAt(int x, int y) const {
+    int tileX = x / TILE_SIZE;
+    int tileY = y / TILE_SIZE;
+
+    if (tileX >= 0 && tileX < numCols && tileY >= 0 && tileY < numRows) {
+        int index = tileY * numCols + tileX; // Convert 2D coordinates to 1D index
+        return tileMap[index];
+    }
+
+    return nullptr; // Out of bounds
+}
+
