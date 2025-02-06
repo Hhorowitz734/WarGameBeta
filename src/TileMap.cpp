@@ -16,7 +16,7 @@ void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::v
     for (int i = 0; i < numRows; i++) {
         for (int j = 0; j < numCols; j++) {
             
-            tileMap.emplace_back(std::make_shared<Tile>(j * tileSize, i * tileSize, textures[dist(gen)]));
+            tileMap.emplace_back(std::make_shared<Tile>(j * tileSize, i * tileSize, textures[dist(gen)], dist(gen)));
             
         }
     }
@@ -88,7 +88,7 @@ void TileMap::loadFromFile(const std::string& filename, const std::string& mapPa
         file.read(&alias[0], aliasLen);
 
         // Store tile
-        tileMap.emplace_back(std::make_shared<Tile>(x, y, alias));
+        tileMap.emplace_back(std::make_shared<Tile>(x, y, alias, 1));
     }
 }
 

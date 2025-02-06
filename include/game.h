@@ -61,6 +61,7 @@ private:
     // Inner Map Stuff
     void enterInnerMap(std::shared_ptr<Tile> tile);
     void generateInnerMap(std::shared_ptr<Tile> tile); // Given a tile, sees if it has an inner map. if it does, loads it. otherwise generates it
+    // I feel liike this function should be moved to settings??
     std::vector<std::string> getMatchingTerrain(const std::string& terrainType);
 
 };

@@ -8,7 +8,7 @@ GlobalSettings& GlobalSettings::getInstance() {
 
 // Constructor
 GlobalSettings::GlobalSettings()
-    : TILE_SIZE(50), WINDOW_WIDTH(600), WINDOW_HEIGHT(800), MAP_PATH_PREFIX("../maps/") {
+    : TILE_SIZE(50), WINDOW_WIDTH(600), WINDOW_HEIGHT(800), MAP_PATH_PREFIX("../maps/"), playerId(1) {
     TILE_TEXTURES = {
         {"darkgrass", "../assets/darkgrass.png"},
         {"medgrass1", "../assets/medgrass_subtexture1.png"},
@@ -33,3 +33,6 @@ const std::unordered_map<std::string, std::string>& GlobalSettings::getTileTextu
 const std::string& GlobalSettings::getTileTexture(const std::string& tileType) const {
     return TILE_TEXTURES.at(tileType);
 }
+
+const int32_t& GlobalSettings::getPlayerId() const { return playerId; }
+bool GlobalSettings::isPlayerId(const int32_t& id) const { return playerId == id; }

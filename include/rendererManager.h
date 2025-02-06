@@ -19,7 +19,7 @@ public:
     void present();
 
     // Hover state
-    void updateHover(int x, int y);
+    void updateHover(int x, int y, SDL_Color newHoverColor);
 
     // Accessors
     SDL_Renderer* getSDLRenderer();
@@ -29,7 +29,9 @@ private:
     SDL_Renderer* renderer;
     TileRenderer* tileRenderer;
     const int TILE_SIZE;
+
     std::tuple<int, int> currHover;
+    SDL_Color hoverColor;
 };
 
 #endif // RENDERER_MANAGER_H

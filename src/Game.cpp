@@ -113,7 +113,16 @@ void Game::processEvents() {
         if (event.type == SDL_MOUSEMOTION) {
             int hoverX, hoverY;
             if (cursorManager.update(event, WINDOW_WIDTH / TILE_SIZE, WINDOW_HEIGHT / TILE_SIZE, hoverX, hoverY)) {
-                rendererManager->updateHover(hoverX, hoverY); // Send coordinates directly
+
+
+                std::shared_ptr<Tile> tile = tileMap.getTileAt(event.motion.x, event.motion.y);
+                const GlobalSettings& settings = GlobalSettings::getInstance();
+                SDL_Color color;
+
+                if (settings.isPlayerId(tile->getOwnerId())) { color = {0, 255, 0, 125}; }
+                else { color = {255, 255, 0, 125}; }
+
+                rendererManager->updateHover(hoverX, hoverY, color); // Send coordinates directly
             }
 
         }

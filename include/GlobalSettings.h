@@ -19,6 +19,8 @@ public:
     const std::unordered_map<std::string, std::string>& getTileTextures() const;
     const std::string& getTileTexture(const std::string& tileType) const;
     const std::string& getMapPathPrefix() const;
+    const int32_t& getPlayerId() const;
+    bool isPlayerId(const int32_t& id) const;
 private:
 
     GlobalSettings(); 
@@ -32,6 +34,9 @@ private:
 
     // Textures
     std::unordered_map<std::string, std::string> TILE_TEXTURES;
+
+    // User Settings
+    const int32_t playerId;
 
 };
 
