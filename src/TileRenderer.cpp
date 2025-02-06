@@ -16,10 +16,10 @@ void TileRenderer::renderTiles(const TileMap& tileMap, int tileSize) {
     const auto& tiles = tileMap.getTileMap();
 
     for (const auto& tile : tiles) {
-        auto it = textureCache.find(tile.getAssetAlias());
+        auto it = textureCache.find(tile->getAssetAlias());
         if (it == textureCache.end() || !it->second) continue;
 
-        SDL_Rect dstRect = { tile.getX(), tile.getY(), tileSize, tileSize };
+        SDL_Rect dstRect = { tile->getX(), tile->getY(), tileSize, tileSize };
         SDL_RenderCopy(renderer, it->second, nullptr, &dstRect);
     }
 }

@@ -14,13 +14,15 @@ void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::v
 
     for (int i = 0; i < numRows; i++) {
         for (int j = 0; j < numCols; j++) {
-            tileMap.emplace_back(j * tileSize, i * tileSize, textures[dist(gen)]);
+            
+            tileMap.emplace_back(std::make_shared<Tile>(j * tileSize, i * tileSize, textures[dist(gen)]));
+            
         }
     }
 }
 
 // Accessor for the tile map
-const std::vector<Tile>& TileMap::getTileMap() const { 
+const std::vector<std::shared_ptr<Tile>>& TileMap::getTileMap() const { 
     return tileMap; 
 }
 
@@ -40,14 +42,14 @@ void TileMap::saveToFile(const std::string& filename, const std::string& mapPath
     // Store tiles
     for (const auto& tile : tileMap) {
 
-        int x = tile.getX();
-        int y = tile.getY();
+        int x = tile->getX();
+        int y = tile->getY();
 
         file.write(reinterpret_cast<const char*>(&x), sizeof(x));
         file.write(reinterpret_cast<const char*>(&y), sizeof(y));
 
         // Store asset "alias"
-        std::string alias = tile.getAssetAlias();
+        std::string alias = tile->getAssetAlias();
         size_t aliasLen = alias.size();
         file.write(reinterpret_cast<const char*>(&aliasLen), sizeof(aliasLen));
         file.write(alias.c_str(), aliasLen);
@@ -85,6 +87,6 @@ void TileMap::loadFromFile(const std::string& filename, const std::string& mapPa
         file.read(&alias[0], aliasLen);
 
         // Store tile
-        tileMap.emplace_back(x, y, alias);
+        tileMap.emplace_back(std::make_shared<Tile>(x, y, alias));
     }
 }

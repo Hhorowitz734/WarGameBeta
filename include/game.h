@@ -12,6 +12,11 @@
 #include "GlobalSettings.h"
 #include "CursorManager.h"
 
+typedef enum MapState {
+    INNER,
+    OUTER
+} MapState;
+
 class Game {
 public:
     // Constructors & Destructor
@@ -23,9 +28,13 @@ public:
     void run();
     void cleanup();
 
+    // State machine switch
+    
+
 private:
     // Game State
     bool running = false;
+    MapState state = OUTER;
 
     // SDL Window & Rendering
     SDL_Window* window = nullptr;
