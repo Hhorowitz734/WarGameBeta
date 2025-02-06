@@ -37,7 +37,7 @@ private:
     const int WINDOW_WIDTH = 600;
     const int WINDOW_HEIGHT = 800;
 
-    const int TILE_SIZE = 50;
+    const int TILE_SIZE = 100;
     
     std::unordered_map<std::string, std::string> TILE_TEXTURES = {
         {"darkgrass", "../assets/darkgrass.png"},
