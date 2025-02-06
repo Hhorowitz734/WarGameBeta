@@ -26,6 +26,10 @@ public:
         return (it != TILE_TEXTURES.end()) ? it->second : "";
     }
 
+    std::unordered_map<std::string, std::string> getTileTextures() const {
+        return TILE_TEXTURES;
+    }
+
 
 
 private:
@@ -33,10 +37,17 @@ private:
     const int WINDOW_WIDTH = 600;
     const int WINDOW_HEIGHT = 800;
 
-    const int TILE_SIZE = 100;
+    const int TILE_SIZE = 50;
     
     std::unordered_map<std::string, std::string> TILE_TEXTURES = {
-        {"darkgrass", "../assets/darkgrass.png"}
+        {"darkgrass", "../assets/darkgrass.png"},
+        {"medgrass1", "../assets/medgrass_subtexture1.png"},
+        {"medgrass2", "../assets/medgrass_subtexture2.png"},
+        {"deadgrass1", "../assets/deadgrass1_subtexture1.png"},
+        {"deadgrass2", "../assets/deadgrass1_subtexture2.png"},
+        {"deadgrass3", "../assets/deadgrass1_subtexture3.png"},
+
+
     };
 
     GlobalSettings() {};

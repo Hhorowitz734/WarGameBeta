@@ -3,10 +3,11 @@
 
 #include <SDL.h>
 #include "TileRenderer.h"
+#include <unordered_map>
 
 class RendererManager {
 public:
-    explicit RendererManager(SDL_Window* window) {
+    explicit RendererManager(SDL_Window* window, std::unordered_map<std::string, std::string> tileAssetMap) {
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         if (!renderer) {
@@ -14,7 +15,7 @@ public:
             return;
         }
 
-        tileRenderer = new TileRenderer(renderer);
+        tileRenderer = new TileRenderer(renderer, tileAssetMap);
     }
 
     ~RendererManager() {
@@ -36,6 +37,8 @@ public:
 private:
     SDL_Renderer* renderer;
     TileRenderer* tileRenderer;
+
+    
 };
 
 #endif // RENDERER_MANAGER_H

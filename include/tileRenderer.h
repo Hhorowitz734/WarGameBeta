@@ -8,11 +8,12 @@
 #include "TileMap.h"
 
 #include <iostream>
+#include <unordered_map>
 
 class TileRenderer {
 public:
-    explicit TileRenderer(SDL_Renderer* renderer)
-        : renderer(renderer) {}
+    explicit TileRenderer(SDL_Renderer* renderer, std::unordered_map<std::string, std::string> assetMap)
+        : renderer(renderer), assetMap(assetMap) {}
 
     ~TileRenderer() {}
 
@@ -22,7 +23,11 @@ public:
 
         for (const auto& row : tiles) {
             for (const auto& tile : row) {
-                SDL_Surface* surface = IMG_Load(tile.getAssetPath().c_str());
+
+                std::string assetAlias = tile.getAssetAlias();
+                std::string assetPath = getTilePathFromAlias(assetAlias);
+
+                SDL_Surface* surface = IMG_Load(assetPath.c_str());
                 if (!surface) {
                     SDL_Log("Failed to load tile texture: %s", IMG_GetError());
                     continue;
@@ -42,6 +47,12 @@ public:
 
 private:
     SDL_Renderer* renderer;
+    std::unordered_map<std::string, std::string> assetMap;
+
+    std::string getTilePathFromAlias(const std::string alias) const {
+        auto it = assetMap.find(alias);
+        return (it != assetMap.end()) ? it->second : "";
+    }
 };
 
 #endif // TILE_RENDERER_H

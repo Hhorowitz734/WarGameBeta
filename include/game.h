@@ -10,13 +10,16 @@
 class Game {
 public:
     Game() : window(nullptr), rendererManager(nullptr), running(false) {
-        
+
         // Get global settings
         const GlobalSettings& settings = GlobalSettings::getInstance();
 
         TILE_SIZE = settings.getTileSize();
         WINDOW_WIDTH = settings.getWindowWidth();
         WINDOW_HEIGHT = settings.getWindowHeight();
+
+        TILE_TEXTURES = settings.getTileTextures();
+
     }
 
     ~Game() {
@@ -44,10 +47,10 @@ public:
         }
 
         // Initialize RenderManager
-        rendererManager = new RendererManager(window);
+        rendererManager = new RendererManager(window, TILE_TEXTURES);
         int numRows = WINDOW_HEIGHT / TILE_SIZE;
         int numCols = WINDOW_WIDTH / TILE_SIZE;
-        tileMap.generateTiles(numRows, numCols, TILE_SIZE); 
+        tileMap.generateTiles(numRows, numCols, TILE_SIZE, {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"}); 
 
         running = true;
         return true;
@@ -76,6 +79,8 @@ private:
     int TILE_SIZE = 0;
     int WINDOW_WIDTH = 0;
     int WINDOW_HEIGHT = 0;
+
+    std::unordered_map<std::string, std::string> TILE_TEXTURES = {};
 
     void processEvents() {
         SDL_Event event;

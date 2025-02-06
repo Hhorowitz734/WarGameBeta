@@ -7,11 +7,11 @@ class Tile {
 
 public:
 
-    Tile(int x, int y, const std::string& path)
-        : x(x), y(y), assetPath(path) {}
+    Tile(int x, int y, const std::string& assetAlias)
+        : x(x), y(y), assetAlias(assetAlias) {}
 
     // Getters and setters
-    const std::string& getAssetPath() const { return assetPath; }
+    const std::string& getAssetAlias() const { return assetAlias; }
 
     int getX() const { return x; }
     int getY() const { return y; }
@@ -19,7 +19,7 @@ public:
 
     
 private:
-    std::string assetPath = "../assets/darkgrass.png";
+    std::string assetAlias = "darkgrass";
     int x, y = 0;
     
 };
