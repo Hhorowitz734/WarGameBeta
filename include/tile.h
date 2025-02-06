@@ -4,24 +4,19 @@
 #include <string>
 
 class Tile {
-
 public:
+    // Constructor
+    Tile(int x, int y, const std::string& assetAlias);
 
-    Tile(int x, int y, const std::string& assetAlias)
-        : x(x), y(y), assetAlias(assetAlias) {}
+    // Getters
+    const std::string& getAssetAlias() const;
+    int getX() const;
+    int getY() const;
 
-    // Getters and setters
-    const std::string& getAssetAlias() const { return assetAlias; }
-
-    int getX() const { return x; }
-    int getY() const { return y; }
-
-
-    
 private:
-    std::string assetAlias = "darkgrass";
-    int x, y = 0;
-    
+    std::string assetAlias;
+    int x;
+    int y;
 };
 
-#endif
+#endif // TILE_H

@@ -2,56 +2,35 @@
 #define GLOBAL_SETTINGS_H
 
 #include <unordered_map>
+#include <string>
 
 class GlobalSettings {
-
 public:
-    GlobalSettings(const GlobalSettings&) = delete; //Singleton for obvious reasons
+
+    // Singleton
+    GlobalSettings(const GlobalSettings&) = delete;
     GlobalSettings& operator=(const GlobalSettings&) = delete;
+    static GlobalSettings& getInstance();
 
-
-    // Access point
-    static GlobalSettings& getInstance() {
-        static GlobalSettings instance;
-        return instance;
-    }
-
-    int getWindowWidth() const { return WINDOW_WIDTH; }
-    int getWindowHeight() const { return WINDOW_HEIGHT; }
-    
-    int getTileSize() const { return TILE_SIZE; }
-
-    const std::string& getTileTexture(const std::string& tileType) const {
-        return TILE_TEXTURES.at(tileType);
-    }
-
-
-    const std::unordered_map<std::string, std::string>& getTileTextures() const {
-        return TILE_TEXTURES;
-    }
-
-
+    // Getters
+    int getWindowWidth() const;
+    int getWindowHeight() const;
+    int getTileSize() const;
+    const std::unordered_map<std::string, std::string>& getTileTextures() const;
+    const std::string& getTileTexture(const std::string& tileType) const;
 
 private:
 
-    const int WINDOW_WIDTH = 600;
-    const int WINDOW_HEIGHT = 800;
+    GlobalSettings(); 
 
-    const int TILE_SIZE = 100;
+    // Config
+    const int WINDOW_WIDTH;
+    const int WINDOW_HEIGHT;
+    const int TILE_SIZE;
+
+    // Textures
+    std::unordered_map<std::string, std::string> TILE_TEXTURES;
     
-    std::unordered_map<std::string, std::string> TILE_TEXTURES = {
-        {"darkgrass", "../assets/darkgrass.png"},
-        {"medgrass1", "../assets/medgrass_subtexture1.png"},
-        {"medgrass2", "../assets/medgrass_subtexture2.png"},
-        {"deadgrass1", "../assets/deadgrass1_subtexture1.png"},
-        {"deadgrass2", "../assets/deadgrass1_subtexture2.png"},
-        {"deadgrass3", "../assets/deadgrass1_subtexture3.png"},
-    };
-
-    GlobalSettings() {};
-
-
 };
 
-
-#endif
+#endif // GLOBAL_SETTINGS_H

@@ -10,69 +10,22 @@
 
 class TileRenderer {
 public:
-    explicit TileRenderer(SDL_Renderer* renderer, const std::unordered_map<std::string, std::string>& assetMap)
-        : renderer(renderer), assetMap(assetMap) {
-        loadTextures(); // ✅ Load textures once
-    }
+    // Constructor & Destructor
+    TileRenderer(SDL_Renderer* renderer, const std::unordered_map<std::string, std::string>& assetMap);
+    ~TileRenderer();
 
-    ~TileRenderer() {
-        cleanupTextures(); // ✅ Free textures at destruction
-    }
-
-    void renderTiles(const TileMap& tileMap, int tileSize) {
-    const auto& tiles = tileMap.getTileMap(); 
-
-    for (const auto& tile : tiles) {
-        auto it = textureCache.find(tile.getAssetAlias());
-        if (it == textureCache.end() || !it->second) continue;
-
-        SDL_Rect dstRect = { tile.getX(), tile.getY(), tileSize, tileSize };
-        SDL_RenderCopy(renderer, it->second, nullptr, &dstRect);
-    }
-}
-
+    // Rendering
+    void renderTiles(const TileMap& tileMap, int tileSize);
 
 private:
-
     SDL_Renderer* renderer;
     std::unordered_map<std::string, std::string> assetMap;
-    std::unordered_map<std::string, SDL_Texture*> textureCache; 
+    std::unordered_map<std::string, SDL_Texture*> textureCache;
 
-    void loadTextures() {
-        for (const auto& pair : assetMap) {
-            SDL_Surface* surface = IMG_Load(pair.second.c_str());
-            if (!surface) {
-                SDL_Log("Failed to load texture: %s", IMG_GetError());
-                continue;
-            }
-
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            SDL_FreeSurface(surface);
-
-            if (!texture) {
-                SDL_Log("Failed to create texture for: %s", pair.second.c_str());
-                continue;
-            }
-
-            textureCache[pair.first] = texture; // ✅ Store in cache
-        }
-    }
-
-    SDL_Texture* getTexture(const std::string& alias) const {
-        auto it = textureCache.find(alias);
-        if (it != textureCache.end()) {
-            return it->second;
-        }
-        SDL_Log("Warning: Texture alias '%s' not found!", alias.c_str());
-        return nullptr;
-    }
-
-    void cleanupTextures() {
-        for (auto& pair : textureCache) {
-            SDL_DestroyTexture(pair.second);
-        }
-        textureCache.clear();
-    }
+    // Texture management
+    void loadTextures();
+    SDL_Texture* getTexture(const std::string& alias) const;
+    void cleanupTextures();
 };
 
 #endif // TILE_RENDERER_H
