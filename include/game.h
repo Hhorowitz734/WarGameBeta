@@ -51,6 +51,8 @@ private:
     int WINDOW_HEIGHT = 0;
     std::unordered_map<std::string, std::string> TILE_TEXTURES;
     const std::string& MAP_PATH_PREFIX;
+    std::string map_filename;
+    MapState curr_state = OUTER;
 
 
     // Core Game Loop Functions
@@ -63,6 +65,8 @@ private:
     void generateInnerMap(std::shared_ptr<Tile> tile); // Given a tile, sees if it has an inner map. if it does, loads it. otherwise generates it
     // I feel liike this function should be moved to settings??
     std::vector<std::string> getMatchingTerrain(const std::string& terrainType);
+    void exitInnerMap();
+
 
 };
 

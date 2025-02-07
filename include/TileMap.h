@@ -13,7 +13,7 @@ class TileMap {
 public:
 
     TileMap();
-    
+
     // Generates a grid of tiles with random textures
     void generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures);
 

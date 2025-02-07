@@ -83,6 +83,7 @@ bool Game::init() {
 
 
     SDL_Log("Using map: %s", mapFile.c_str());
+    map_filename = mapFile;
     running = true;
     return true;
 }
@@ -133,6 +134,9 @@ void Game::processEvents() {
             if (GlobalSettings::getInstance().isPlayerId(tile->getOwnerId())) enterInnerMap(tile);
             
         }
+        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_TAB) {
+            exitInnerMap();
+        }
     }
 }
 
@@ -149,6 +153,9 @@ void Game::render() {
 }
 
 void Game::enterInnerMap(std::shared_ptr<Tile> tile) {
+
+    if (curr_state == INNER) { return; }
+
     if (!tile) {
         std::cerr << "Error: Null tile passed to enterInnerMap.\n";
         return;
@@ -166,6 +173,7 @@ void Game::enterInnerMap(std::shared_ptr<Tile> tile) {
     std::vector<std::string> terrainTypes;
 
     generateInnerMap(tile);
+    curr_state = INNER;
 }
 
 
@@ -225,4 +233,10 @@ std::vector<std::string> Game::getMatchingTerrain(const std::string& terrainType
     } else {
         return {"darkgrass"}; // Default case
     }
+}
+
+void Game::exitInnerMap() {
+    if (curr_state == OUTER) { return; }
+    tileMap.loadFromFile(map_filename, MAP_PATH_PREFIX);
+    curr_state = OUTER;
 }
