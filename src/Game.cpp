@@ -52,6 +52,7 @@ bool Game::init() {
     int numRows = WINDOW_HEIGHT / TILE_SIZE;
     int numCols = WINDOW_WIDTH / TILE_SIZE;
 
+
     // Load or generate the map
     #if defined(LOAD_EXISTING_MAP)
         mapFile = MAP_FILE_PATH;

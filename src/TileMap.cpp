@@ -3,8 +3,9 @@
 
 // Constructor: Initializes tile map settings from global configurations.
 TileMap::TileMap() {
-    numRows = GlobalSettings::getInstance().getTileSize();
-    numCols = GlobalSettings::getInstance().getTileSize();
+    numRows = GlobalSettings::getInstance().getWindowHeight()/GlobalSettings::getInstance().getTileSize();
+    numCols = GlobalSettings::getInstance().getWindowWidth()/GlobalSettings::getInstance().getTileSize();
+
     TILE_SIZE = GlobalSettings::getInstance().getTileSize();
 }
 
@@ -29,10 +30,9 @@ const std::vector<std::shared_ptr<Tile>>& TileMap::getTileMap() const {
     return tileMap; 
 }
 
-// Saves the current tile map to a binary file.
 void TileMap::saveToFile(const std::string& filename, const std::string& mapPathPrefix) const {
     std::string fullPath = mapPathPrefix + filename;
-    std::ofstream file(fullPath, std::ios::binary);
+    std::ofstream file(fullPath, std::ios::binary | std::ios::trunc);  // Truncate ensures file is cleared
 
     if (!file) { 
         std::cerr << "Error: Failed to open file for saving: " << fullPath << std::endl;
@@ -45,6 +45,7 @@ void TileMap::saveToFile(const std::string& filename, const std::string& mapPath
 
     // Store tiles.
     for (const auto& tile : tileMap) {
+        // Store values in local variables before writing
         int x = tile->getX();
         int y = tile->getY();
         int32_t ownerId = tile->getOwnerId();
@@ -52,18 +53,19 @@ void TileMap::saveToFile(const std::string& filename, const std::string& mapPath
         file.write(reinterpret_cast<const char*>(&x), sizeof(x));
         file.write(reinterpret_cast<const char*>(&y), sizeof(y));
 
-        // Store asset alias.
+        // Store asset alias safely
         std::string alias = tile->getAssetAlias();
         size_t aliasLen = alias.size();
         file.write(reinterpret_cast<const char*>(&aliasLen), sizeof(aliasLen));
-        file.write(alias.c_str(), aliasLen);
+        file.write(alias.data(), aliasLen);  // Use `.data()` instead of `.c_str()` (more explicit)
 
-        // Store owner ID.
+        // Store owner ID
         file.write(reinterpret_cast<const char*>(&ownerId), sizeof(ownerId));
     }
 }
 
-// Loads a tile map from a binary file or generates a new one if the file is missing.
+
+
 void TileMap::loadFromFile(const std::string& filename, const std::string& mapPathPrefix) {
     std::string fullPath = mapPathPrefix + filename;
     std::ifstream file(fullPath, std::ios::binary);
@@ -80,32 +82,61 @@ void TileMap::loadFromFile(const std::string& filename, const std::string& mapPa
         return;
     }
 
-    // Read map dimensions.
-    file.read(reinterpret_cast<char*>(&numRows), sizeof(numRows));
-    file.read(reinterpret_cast<char*>(&numCols), sizeof(numCols));
+    // Read map dimensions safely.
+    int loadedRows = 0, loadedCols = 0;
+    file.read((char*)&loadedRows, sizeof(loadedRows));
+    file.read((char*)&loadedCols, sizeof(loadedCols));
+
+    if (file.fail() || loadedRows <= 0 || loadedCols <= 0) {
+        std::cerr << "Error: Invalid or corrupt map file. Generating a new map.\n";
+        generateTiles(numRows, numCols, TILE_SIZE, 
+            {"medgrass2", "medgrass1", "darkgrass", "deadgrass1", "deadgrass2", "deadgrass3"});
+        saveToFile(filename, mapPathPrefix);
+        return;
+    }
+
+    // Update internal dimensions
+    numRows = loadedRows;
+    numCols = loadedCols;
 
     // Clear and allocate memory for tiles.
     tileMap.clear();
     tileMap.reserve(numRows * numCols);
 
-    // Load tiles.
+    // Load tiles safely.
     for (int i = 0; i < numRows * numCols; i++) {
-        int x, y;
-        int32_t ownerId;
+        int x = 0, y = 0;
+        int32_t ownerId = 0;
 
-        file.read(reinterpret_cast<char*>(&x), sizeof(x));
-        file.read(reinterpret_cast<char*>(&y), sizeof(y));
+        // Read tile position
+        file.read((char*)&x, sizeof(x));
+        file.read((char*)&y, sizeof(y));
 
-        // Read asset alias.
-        size_t aliasLen;
-        file.read(reinterpret_cast<char*>(&aliasLen), sizeof(aliasLen));
-        std::string alias(aliasLen, '\0');
+        // Read asset alias length
+        size_t aliasLen = 0;
+        file.read((char*)&aliasLen, sizeof(aliasLen));
+
+        // Validate alias length (prevent corrupted/bad files)
+        if (aliasLen > 100) {  
+            std::cerr << "Error: Corrupt file detected (alias length too large). Stopping load.\n";
+            return;
+        }
+
+        // Read alias as a string
+        std::string alias;
+        alias.resize(aliasLen);
         file.read(&alias[0], aliasLen);
 
-        // Read owner ID.
-        file.read(reinterpret_cast<char*>(&ownerId), sizeof(ownerId));
+        // Read owner ID
+        file.read((char*)&ownerId, sizeof(ownerId));
 
-        // Store tile.
+        // Ensure all reads were successful
+        if (file.fail()) {
+            std::cerr << "Error: Failed to read tile data. File may be corrupted.\n";
+            return;
+        }
+
+        // Store tile
         tileMap.emplace_back(std::make_shared<Tile>(x, y, alias, ownerId));
     }
 
