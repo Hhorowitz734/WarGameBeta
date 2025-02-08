@@ -54,6 +54,12 @@ public:
      */
     void cleanup();
 
+    void handleTileHover(int mouseX, int mouseY, int hoverX, int hoverY);
+
+    void getMousePosition(int &mouseX, int &mouseY);
+
+
+
 private:
     // Game State
     bool running = false;   ///< Flag indicating if the game is running.

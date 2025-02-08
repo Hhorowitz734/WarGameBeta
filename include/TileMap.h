@@ -27,7 +27,7 @@ public:
      * @param tileSize The size of each tile in pixels.
      * @param textures A list of texture aliases used for tile generation.
      */
-    void generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures);
+    void generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures, bool isInner = false);
 
     /**
      * @brief Gets the list of all tiles in the map.

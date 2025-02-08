@@ -8,7 +8,7 @@ GlobalSettings& GlobalSettings::getInstance() {
 
 // Constructor: Initializes default game settings.
 GlobalSettings::GlobalSettings()
-    : TILE_SIZE(50), WINDOW_WIDTH(800), WINDOW_HEIGHT(600), MAP_PATH_PREFIX("../maps/"), playerId(1) {
+    : TILE_SIZE(100), WINDOW_WIDTH(1000), WINDOW_HEIGHT(600), MAP_PATH_PREFIX("../maps/"), playerId(1) {
     
     // Define tile textures with file paths.
     TILE_TEXTURES = {

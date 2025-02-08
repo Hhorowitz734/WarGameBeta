@@ -10,7 +10,7 @@ TileMap::TileMap() {
 }
 
 // Generates a grid of tiles with random textures.
-void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures) {
+void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::vector<std::string>& textures, bool isInner) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dist(0, textures.size() - 1);
@@ -18,9 +18,12 @@ void TileMap::generateTiles(int numRows, int numCols, int tileSize, const std::v
     tileMap.clear();
     tileMap.reserve(numRows * numCols);
 
+    int owner = 1776;
+
     for (int i = 0; i < numRows; i++) {
         for (int j = 0; j < numCols; j++) {
-            tileMap.emplace_back(std::make_shared<Tile>(j * tileSize, i * tileSize, textures[dist(gen)], dist(gen)));
+            if (!isInner) { owner = dist(gen); }
+            tileMap.emplace_back(std::make_shared<Tile>(j * tileSize, i * tileSize, textures[dist(gen)], owner));
         }
     }
 }

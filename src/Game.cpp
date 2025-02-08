@@ -107,10 +107,7 @@ void Game::processEvents() {
         if (event.type == SDL_MOUSEMOTION) {
             int hoverX, hoverY;
             if (cursorManager.update(event, WINDOW_WIDTH / TILE_SIZE, WINDOW_HEIGHT / TILE_SIZE, hoverX, hoverY)) {
-                std::shared_ptr<Tile> tile = tileMap.getTileAt(event.motion.x, event.motion.y);
-                const GlobalSettings& settings = GlobalSettings::getInstance();
-                SDL_Color color = settings.isPlayerId(tile->getOwnerId()) ? SDL_Color{0, 255, 0, 125} : SDL_Color{255, 255, 0, 125};
-                rendererManager->updateHover(hoverX, hoverY, color);
+                handleTileHover(event.motion.x, event.motion.y, hoverX, hoverY);
             }
         }
 
@@ -195,7 +192,7 @@ void Game::generateInnerMap(std::shared_ptr<Tile> tile) {
 
     // Generate new inner map
     tileMap.generateTiles(WINDOW_HEIGHT / TILE_SIZE, WINDOW_WIDTH / TILE_SIZE, TILE_SIZE, 
-        getMatchingTerrain(tile->getAssetAlias()));
+        getMatchingTerrain(tile->getAssetAlias()), true);
 
     // Ensure the directory exists before saving
     std::filesystem::create_directories(MAP_PATH_PREFIX + mapName);
@@ -218,4 +215,23 @@ void Game::exitInnerMap() {
     if (curr_state == OUTER) return;
     tileMap.loadFromFile(map_filename, MAP_PATH_PREFIX);
     curr_state = OUTER;
+}
+
+void Game::handleTileHover(int mouseX, int mouseY, int hoverX, int hoverY) {
+    std::shared_ptr<Tile> tile = tileMap.getTileAt(mouseX, mouseY);
+    if (!tile) return; // Prevent accessing a null pointer
+
+    const GlobalSettings& settings = GlobalSettings::getInstance();
+    const int32_t& ownerId = tile->getOwnerId();
+
+    SDL_Color color = settings.isPlayerId(ownerId) ? SDL_Color{0, 255, 0, 125} : SDL_Color{255, 255, 0, 125};
+    if (ownerId == 1776) {
+        color = SDL_Color{0, 0, 0, 125};
+    }
+
+    rendererManager->updateHover(hoverX, hoverY, color);
+}
+
+void Game::getMousePosition(int &mouseX, int &mouseY) {
+    SDL_GetMouseState(&mouseX, &mouseY);
 }
